@@ -34,6 +34,7 @@ $CROSS-objcopy -O binary $BUILD_DIR/test64.elf $BUILD_DIR/test64.bin
 > runs the project in qemu (how the fuck do i exit qemu)
 
 ~~~sh
+echo "running vm"
 echo "exit with ctrl a, then x"
 qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -kernel ./build/test64.elf
 ~~~
@@ -43,5 +44,16 @@ qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -kernel ./build/test64.el
 > removes build artifacts from the directory
 
 ~~~sh
+echo "cleaning"
 rm -fr build
+~~~
+
+## cbr
+
+> clean, build, run
+
+~~~sh
+mask clean
+mask build
+mask run
 ~~~
