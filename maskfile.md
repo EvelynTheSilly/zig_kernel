@@ -17,7 +17,7 @@ BUILD_DIR=build
 mkdir -p $BUILD_DIR
 
 # Compile Zig source to object file
-$ZIG build-obj main.zig -target aarch64-freestanding-none -O Debug -fno-stack-protector  -femit-bin=$BUILD_DIR/main.o
+$ZIG build-obj main.zig -target aarch64-freestanding-none -O Debug -fno-stack-protector  -femit-bin=$BUILD_DIR/main.o -mcpu=generic+strict_align
 
 # Assemble startup
 $CROSS-as -c boot.s -o $BUILD_DIR/boot.o
