@@ -1,5 +1,6 @@
 pub const panic = std.debug.FullPanic(kernel_panic);
 const std = @import("std");
+const uart = @import("uart.zig");
 
 const UART_BASE: u64 = 0x09000000;
 const UART_DATA_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x00); // Data register (read/write)
@@ -89,6 +90,7 @@ pub export fn c_entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
         print_uart_char(char);
     }
     println("");
+    uart.UARTWriter.print("hello {s}!", .{"world"}) catch @panic("failed to print line");
 
     const line = readLine(allocator) catch @panic("failed to read line");
     println("");
