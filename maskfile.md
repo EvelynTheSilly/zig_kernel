@@ -69,6 +69,8 @@ mask run
 echo "running vm"
 echo "exit with ctrl a, then x"
 echo "run mask dbg_attatch to attatch to the debugger"
+echo ""
+echo ""
 qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -kernel ./build/kernel.elf -S -s
 ~~~
 
