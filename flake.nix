@@ -22,9 +22,11 @@
         packages = [
           cross.buildPackages.gcc
           cross.buildPackages.binutils
+          cross.buildPackages.gdb
           pkgs.qemu
           pkgs.cmake
           pkgs.mask
+          pkgs.zig
         ];
 
         shellHook = ''
