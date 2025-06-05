@@ -64,7 +64,7 @@ fn readLine(allocator: std.mem.Allocator) ![]u8 {
         const byte = uart_read_char();
         print_uart_char(byte);
 
-        if (byte == '\n') break;
+        if (byte == 13) break;
         try buffer.append(byte);
     }
 
@@ -91,7 +91,9 @@ pub export fn c_entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     println("");
 
     const line = readLine(allocator) catch @panic("failed to read line");
+    println("");
     print_uart_buffer(line);
+    println("");
 
     println("exiting");
     @panic("kernel panic test");
