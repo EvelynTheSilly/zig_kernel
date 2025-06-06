@@ -1,6 +1,7 @@
 pub const panic = std.debug.FullPanic(kernel_panic);
 const std = @import("std");
 const uart = @import("uart.zig");
+const println = @import("uart.zig").println;
 
 const UART_BASE: u64 = 0x09000000;
 const UART_DATA_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x00); // Data register (read/write)
@@ -26,66 +27,15 @@ pub export fn memset(s: [*]u8, c: u8, n: usize) [*]u8 {
     }
     return s;
 }
-
-fn print_uart_buffer(msg: []const u8) void {
-    for (msg) |c| {
-        UART_DATA_REGISTER.* = c;
-    }
-}
-
-fn print_uart_char(char: u8) void {
-    UART_DATA_REGISTER.* = char;
-}
-
-fn println(msg: []const u8) void {
-    print_uart_buffer(msg);
-    print_uart_char('\n'); // newline
-}
-
-fn uart_has_input() bool {
-    return (UART_FLAG_REGISTER.* & UART_FLAG_RXFE) == 0; // apply the bitmask to the value in the register
-}
-
-fn uart_read_char() u8 {
-    while (!uart_has_input()) {}
-    return UART_DATA_REGISTER.*;
-}
-
-fn print_uart(msg: std.ArrayList(u8)) void {
-    for (msg) |c| {
-        UART_DATA_REGISTER.* = c;
-    }
-}
-
-fn readLine(allocator: std.mem.Allocator) ![]u8 {
-    var buffer = std.ArrayList(u8).init(allocator);
-    defer buffer.deinit(); // Ensure cleanup on error
-
-    while (true) {
-        const byte = uart_read_char();
-        print_uart_char(byte);
-
-        if (byte == 13) break;
-        try buffer.append(byte);
-    }
-
-    return buffer.toOwnedSlice();
-}
-
 // 1mb heap buffer
 const aligned_alloc = struct {
     var buffer: [1024 * 1024]u8 align(16) = undefined;
 };
 
 pub export fn c_entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    //defer @panic("kernel exit");
+    defer @panic("kernel exit");
     println("welcome!");
-    //var fixed_allocator align(16) = std.heap.FixedBufferAllocator.init(&aligned_alloc.buffer); // the init function also finishes, but the asembly between the init function and the next line doesnt finish
-    //const allocator align(16) = fixed_allocator.allocator();
     uart.UARTWriter.print("this is a hello world example!", .{}) catch @panic("failed to print line");
-    //uart.UARTReader.streamUntilDelimiter(uart.UARTWriter, 13, null) catch @panic("failed to read untill delimiter");
-
-    println("exiting");
 }
 
 // Basic panic handler
