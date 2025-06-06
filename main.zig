@@ -78,27 +78,14 @@ const aligned_alloc = struct {
 };
 
 pub export fn c_entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    var fixed_allocator align(16) = std.heap.FixedBufferAllocator.init(&aligned_alloc.buffer); // the init function also finishes, but the asembly between the init function and the next line doesnt finish
-    const allocator align(16) = fixed_allocator.allocator();
-    println("this is a hello world example");
-    print_uart_char(uart_read_char());
-    while (true) {
-        const char = uart_read_char();
-        if (char == 13) {
-            break;
-        }
-        print_uart_char(char);
-    }
-    println("");
-    uart.UARTWriter.print("hello {s}!", .{"world"}) catch @panic("failed to print line");
-
-    const line = readLine(allocator) catch @panic("failed to read line");
-    println("");
-    print_uart_buffer(line);
-    println("");
+    //defer @panic("kernel exit");
+    println("welcome!");
+    //var fixed_allocator align(16) = std.heap.FixedBufferAllocator.init(&aligned_alloc.buffer); // the init function also finishes, but the asembly between the init function and the next line doesnt finish
+    //const allocator align(16) = fixed_allocator.allocator();
+    uart.UARTWriter.print("this is a hello world example!", .{}) catch @panic("failed to print line");
+    //uart.UARTReader.streamUntilDelimiter(uart.UARTWriter, 13, null) catch @panic("failed to read untill delimiter");
 
     println("exiting");
-    @panic("kernel panic test");
 }
 
 // Basic panic handler

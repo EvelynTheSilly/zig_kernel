@@ -22,7 +22,7 @@ fn readFn(_: *const anyopaque, buffer: []u8) anyerror!usize {
     if (buffer.len == 0) return 0;
 
     // Wait for 1st byte (blocking)
-    buffer[0] = try readByteBlocking();
+    buffer[0] = readByteBlocking();
     var count: usize = 1;
 
     // Read more if possible (non-blocking)

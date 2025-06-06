@@ -56,7 +56,6 @@ rm -fr build
 > clean, build, run
 
 ~~~sh
-mask clean
 mask build
 mask run
 ~~~
