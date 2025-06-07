@@ -41,6 +41,9 @@ pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
 // Basic panic handler
 pub fn kernel_panic(msg: []const u8, _: ?usize) noreturn {
     // Print the panic message
+    println("");
+    println("");
+    println("");
     println("KERNEL PANIC");
     println("---------------------------");
     println(msg);
