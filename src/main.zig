@@ -32,7 +32,7 @@ const aligned_alloc = struct {
     var buffer: [1024 * 1024]u8 align(16) = undefined;
 };
 
-pub export fn c_entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     defer @panic("kernel exit");
     println("welcome!");
     uart.UARTWriter.print("this is a hello world example!", .{}) catch @panic("failed to print line");
