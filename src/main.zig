@@ -33,12 +33,13 @@ const aligned_alloc = struct {
 };
 
 pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    defer @panic("kernel exit");
     println("welcome!");
     uart.UARTWriter.print("this is a hello world example!", .{}) catch @panic("failed to print line");
+    println("now i will fire an interupt");
+    asm volatile ("brk #0x123");
 }
 
-// Basic panic handler
+// Basic panic _handler
 pub fn kernel_panic(msg: []const u8, _: ?usize) noreturn {
     // Print the panic message
     println("");
@@ -53,4 +54,38 @@ pub fn kernel_panic(msg: []const u8, _: ?usize) noreturn {
     while (true) {
         asm volatile ("wfi");
     }
+}
+
+// usermode interupts
+pub export fn el0_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("sync interupt");
+}
+
+pub export fn el0_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("irq interupt");
+}
+
+pub export fn el0_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("fiq interupt");
+}
+
+pub export fn el0_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("serror interupt");
+}
+
+// kernel mode interupts
+pub export fn el1_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("sync interupt");
+}
+
+pub export fn el1_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("irq interupt");
+}
+
+pub export fn el1_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("fiq interupt");
+}
+
+pub export fn el1_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("serror interupt");
 }
