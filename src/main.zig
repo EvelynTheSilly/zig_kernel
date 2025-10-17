@@ -58,34 +58,34 @@ pub fn kernel_panic(msg: []const u8, _: ?usize) noreturn {
 
 // usermode interupts
 pub export fn el0_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("sync interupt");
+    @panic("user sync interupt");
 }
 
 pub export fn el0_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("irq interupt");
+    @panic("user irq interupt");
 }
 
 pub export fn el0_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("fiq interupt");
+    @panic("user fiq interupt");
 }
 
 pub export fn el0_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("serror interupt");
+    @panic("user serror interupt");
 }
 
 // kernel mode interupts
 pub export fn el1_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("sync interupt");
+    @panic("kernel sync interupt");
 }
 
 pub export fn el1_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("irq interupt");
+    @panic("kernel irq interupt");
 }
 
 pub export fn el1_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("fiq interupt");
+    @panic("kernel fiq interupt");
 }
 
 pub export fn el1_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("serror interupt");
+    @panic("kernel serror interupt");
 }
