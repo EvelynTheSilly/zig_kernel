@@ -1,4 +1,4 @@
-# Tasks For My Project
+# MaskFile
 
 
 ## build
@@ -32,7 +32,7 @@ $CROSS-objcopy -O binary $BUILD_DIR/kernel.elf $BUILD_DIR/kernel.bin
 
 ## run
 
-> runs the project in qemu (how the fuck do i exit qemu)
+> runs the project in qemu
 
 ~~~sh
 echo "running vm"
