@@ -11,5 +11,9 @@ SECTIONS
         KEEP(*(.vectors))
     }
 	. = . + 0x100000; /* 4kB of stack memory */
+	. = ALIGN(16);
 	stack_top = .;
+	. = . + 0x100000; /* 4kB of stack memory */
+	. = ALIGN(16);
+	el0_stack_top = .;
 }
