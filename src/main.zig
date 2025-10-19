@@ -3,13 +3,6 @@ const std = @import("std");
 const uart = @import("uart.zig");
 const println = @import("uart.zig").println;
 
-const UART_BASE: u64 = 0x09000000;
-const UART_DATA_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x00); // Data register (read/write)
-const UART_FLAG_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x18); // Flag register
-const UART_FLAG_RXFE: u8 = (1 << 4); // flag register bitmask (00010000)
-const UART_INTERRUPT_MASK_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x38); // Interrupt mask register (optional)
-const UART_INTERRUPT_CLEAR_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x44); // Interrupt clear register (optional)
-
 // Simple memcpy implementation
 pub export fn memcpy(dest: [*]u8, src: [*]const u8, n: usize) [*]u8 {
     var i: usize = 0;
