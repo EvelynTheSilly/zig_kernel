@@ -98,8 +98,6 @@ pub export fn el1_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} })
 }
 
 // hypervisor interupts
-
-// kernel mode interupts
 pub export fn el2_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     @panic("HV sync interupt");
 }
