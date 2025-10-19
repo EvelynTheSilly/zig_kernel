@@ -68,7 +68,9 @@ pub export fn el0_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) v
     @panic("user sync interupt");
 }
 
-pub export fn el0_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {}
+pub export fn el0_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("user irq interupt");
+}
 
 pub export fn el0_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     @panic("user fiq interupt");
@@ -80,7 +82,7 @@ pub export fn el0_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} })
 
 // kernel mode interupts
 pub export fn el1_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    println("msg: []const u8");
+    println("el1 sync interupt (syscall) hit, lets hope this doesnt require a crash lol");
 }
 
 pub export fn el1_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
@@ -93,4 +95,23 @@ pub export fn el1_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) vo
 
 pub export fn el1_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     @panic("kernel serror interupt");
+}
+
+// hypervisor interupts
+
+// kernel mode interupts
+pub export fn el2_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("HV sync interupt");
+}
+
+pub export fn el2_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("HV irq interupt");
+}
+
+pub export fn el2_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("HV fiq interupt");
+}
+
+pub export fn el2_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    @panic("HV serror interupt");
 }

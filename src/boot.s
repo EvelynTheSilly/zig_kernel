@@ -196,8 +196,9 @@ el1_serror:
     
     eret   
     .space 128 - (. - el1_serror)
-el2_sync:
 
+// ========== Exceptions from EL2 ==========
+el2_sync:
     // --- Dump registers --- 
     stp     x19, x20, [sp, #-16]!
     stp     x21, x22, [sp, #-16]!
@@ -206,7 +207,7 @@ el2_sync:
     stp     x27, x28, [sp, #-16]!
     stp     x29, x30, [sp, #-16]!
  
-    bl el0_irq
+    bl el2_sync_handler
 
     // --- Restore registers ---
     ldp     x29, x30, [sp], #16
@@ -216,14 +217,71 @@ el2_sync:
     ldp     x21, x22, [sp], #16
     ldp     x19, x20, [sp], #16
     
-    eret   
+    eret
     .space 128 - (. - el2_sync)
+
 el2_irq:
-    b el0_irq
+    // --- Dump registers --- 
+    stp     x19, x20, [sp, #-16]!
+    stp     x21, x22, [sp, #-16]!
+    stp     x23, x24, [sp, #-16]!
+    stp     x25, x26, [sp, #-16]!
+    stp     x27, x28, [sp, #-16]!
+    stp     x29, x30, [sp, #-16]!
+ 
+    bl el2_irq_handler
+
+    // --- Restore registers ---
+    ldp     x29, x30, [sp], #16
+    ldp     x27, x28, [sp], #16
+    ldp     x25, x26, [sp], #16
+    ldp     x23, x24, [sp], #16
+    ldp     x21, x22, [sp], #16
+    ldp     x19, x20, [sp], #16
+    
+    eret
     .space 128 - (. - el2_irq)
+
 el2_fiq:
-    b el0_fiq
+    // --- Dump registers --- 
+    stp     x19, x20, [sp, #-16]!
+    stp     x21, x22, [sp, #-16]!
+    stp     x23, x24, [sp, #-16]!
+    stp     x25, x26, [sp, #-16]!
+    stp     x27, x28, [sp, #-16]!
+    stp     x29, x30, [sp, #-16]!
+ 
+    bl el2_fiq_handler
+
+    // --- Restore registers ---
+    ldp     x29, x30, [sp], #16
+    ldp     x27, x28, [sp], #16
+    ldp     x25, x26, [sp], #16
+    ldp     x23, x24, [sp], #16
+    ldp     x21, x22, [sp], #16
+    ldp     x19, x20, [sp], #16
+    
+    eret
     .space 128 - (. - el2_fiq)
+
 el2_serror:
-    b el0_serror
+    // --- Dump registers --- 
+    stp     x19, x20, [sp, #-16]!
+    stp     x21, x22, [sp, #-16]!
+    stp     x23, x24, [sp, #-16]!
+    stp     x25, x26, [sp, #-16]!
+    stp     x27, x28, [sp, #-16]!
+    stp     x29, x30, [sp, #-16]!
+ 
+    bl el2_serror_handler
+
+    // --- Restore registers ---
+    ldp     x29, x30, [sp], #16
+    ldp     x27, x28, [sp], #16
+    ldp     x25, x26, [sp], #16
+    ldp     x23, x24, [sp], #16
+    ldp     x21, x22, [sp], #16
+    ldp     x19, x20, [sp], #16
+    
+    eret
     .space 128 - (. - el2_serror)
