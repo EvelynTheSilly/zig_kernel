@@ -47,12 +47,12 @@ el1_start:
 .endm
 
 .macro LOAD_REGISTERS
-    stp     x19, x20, [sp, #-16]!
-    stp     x21, x22, [sp, #-16]!
-    stp     x23, x24, [sp, #-16]!
-    stp     x25, x26, [sp, #-16]!
-    stp     x27, x28, [sp, #-16]!
-    stp     x29, x30, [sp, #-16]!
+    ldp     x29, x30, [sp], #16
+    ldp     x27, x28, [sp], #16
+    ldp     x25, x26, [sp], #16
+    ldp     x23, x24, [sp], #16
+    ldp     x21, x22, [sp], #16
+    ldp     x19, x20, [sp], #16
 .endm
 
 .section .vectors, "ax"
@@ -63,12 +63,12 @@ _vector_table:
 // ========== Exceptions from EL0 ==========
 el0_sync:
     DUMP_REGISTERS
-    
+
     bl el0_sync_handler
 
     LOAD_REGISTERS
-    
-    eret    
+
+    eret
     .space 128 - (. - el0_sync)
 
 el0_irq:
@@ -77,8 +77,8 @@ el0_irq:
     bl el0_irq_handler
 
     LOAD_REGISTERS
-    
-    eret   
+
+    eret
     .space 128 - (. - el0_irq)
 
 el0_fiq:
@@ -87,8 +87,8 @@ el0_fiq:
     bl el0_fiq_handler
 
     LOAD_REGISTERS
-    
-    eret   
+
+    eret
     .space 128 - (. - el0_fiq)
 
 el0_serror:
@@ -97,8 +97,8 @@ el0_serror:
     bl el0_serror_handler
 
     LOAD_REGISTERS
-    
-    eret   
+
+    eret
     .space 128 - (. - el0_serror)
 
 // ========== Exceptions from EL1 ==========
@@ -108,8 +108,8 @@ el1_sync:
     bl el1_sync_handler
 
     LOAD_REGISTERS
-    
-    eret   
+
+    eret
     .space 128 - (. - el1_sync)
 
 el1_irq:
@@ -118,8 +118,8 @@ el1_irq:
     bl el1_irq_handler
 
     LOAD_REGISTERS
-    
-    eret   
+
+    eret
     .space 128 - (. - el1_irq)
 
 el1_fiq:
@@ -128,8 +128,8 @@ el1_fiq:
     bl el1_fiq_handler
 
     LOAD_REGISTERS
-    
-    eret   
+
+    eret
     .space 128 - (. - el1_fiq)
 
 el1_serror:
@@ -138,47 +138,47 @@ el1_serror:
     bl el1_serror_handler
 
     LOAD_REGISTERS
-    
-    eret   
+
+    eret
     .space 128 - (. - el1_serror)
 
 // ========== Exceptions from EL2 ==========
 el2_sync:
     DUMP_REGISTERS
- 
+
     bl el2_sync_handler
 
     LOAD_REGISTERS
-    
+
     eret
     .space 128 - (. - el2_sync)
 
 el2_irq:
     DUMP_REGISTERS
- 
+
     bl el2_irq_handler
 
     LOAD_REGISTERS
-    
+
     eret
     .space 128 - (. - el2_irq)
 
 el2_fiq:
     DUMP_REGISTERS
- 
+
     bl el2_fiq_handler
 
     LOAD_REGISTERS
-    
+
     eret
     .space 128 - (. - el2_fiq)
 
 el2_serror:
     DUMP_REGISTERS
- 
+
     bl el2_serror_handler
 
     LOAD_REGISTERS
-    
+
     eret
     .space 128 - (. - el2_serror)
