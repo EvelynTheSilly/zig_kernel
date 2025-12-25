@@ -1,24 +1,39 @@
 .global _Reset
 _Reset:                                     // starts in el2
-    /* --- Configure any EL1 control registers here (SCTLR_EL1, etc.) if needed --- */
-    /* Example (optional): set SCTLR_EL1 to sane defaults later when enabling MMU */
+    b el1_start
+    // stack for EL2 (must exist or sync exception explodes)
+    ldr x0, =el2_stack_top
+    mov sp, x0
 
-    /* --- Prepare SPSR_EL2 to return to EL1h via ERET ---
-       SPSR_EL2.M[3:0] must select EL1h (0b0101) in AArch64.
-       Optionally set DAIF bits (interrupt masks) in SPSR to mask IRQ/FIQ/SError if desired.
-       Many boot sequences use an immediate like 0x3c5 here (M=0101, DAIF masked). */
-    //mov    x2, #0x3c5       // common value: return to EL1h with interrupts masked (verify for your use)
-    //msr    spsr_el2, x2
-
-    /* --- Set return address for ERET to el1_start --- */
-    adrp   x2, el1_start
-    add    x2, x2, :lo12:el1_start
-
-    msr    elr_el2, x2
+    isb
+    // reuse EL1 vectors (good enough)
+    ldr x0, =_vector_table
+    msr VBAR_EL2, x0
     isb
 
-    /* drop to EL1 */
+    // allow EL1 to run AArch64
+    mrs x0, HCR_EL2
+    orr x0, x0, #(1 << 31)   // HCR_EL2.RW = 1
+    msr HCR_EL2, x0
+    isb
+
+    // set EL1 stack
+    ldr x0, =el1_stack_top
+    msr SP_EL1, x0
+
+    // set EL1 entry point
+    ldr x0, =el1_start
+    msr ELR_EL2, x0
+
+    // return state → EL1h
+    mov x0, #(0b0101)        // EL1h, interrupts masked
+    msr SPSR_EL2, x0
+
     eret
+
+
+
+
 
 
 .global el0_start
@@ -30,11 +45,13 @@ el0_start:
 .global el1_start
 el1_start:
     // el1 stack setup
-    ldr x30, =stack_top
-    mov sp, x30
+    ldr x0, =el1_stack_top
+    mov sp, x0
+    // el1 vtable setup
     ldr x0, =_vector_table                  // load vtable into r0
     msr VBAR_EL1, x0
     isb                                     // move r0 to base vector table register
+    // enter zig
     b _entry                                // go to zig entry point
     b .                                     // hang forever
 

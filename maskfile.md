@@ -73,10 +73,11 @@ echo ""
 qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -kernel ./build/kernel.elf -S -s
 ~~~
 
-## dbg_attatch
+## start_gdb
 
 > attatch with debugger
 
 ~~~sh
+mask build
 aarch64-none-elf-gdb -ex "target remote :1234" -ex "symbol-file build/kernel.elf"
 ~~~
