@@ -13,6 +13,7 @@ _Reset:                                     // starts in el2
     /* --- Set return address for ERET to el1_start --- */
     adrp   x2, el1_start
     add    x2, x2, :lo12:el1_start
+
     msr    elr_el2, x2
     isb
 
