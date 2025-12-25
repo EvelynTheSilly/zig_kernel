@@ -1,6 +1,12 @@
 .global _Reset
 _Reset:                                     // starts in el2
     b el1_start
+
+    // --- ALL OF THIS ISNT NECASARY ---
+    // all of this is setup for exiting el2
+    // i thought i was in el2
+    // i am not, never was, no clue why i thought i got there
+
     // stack for EL2 (must exist or sync exception explodes)
     ldr x0, =el2_stack_top
     mov sp, x0
