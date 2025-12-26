@@ -15,15 +15,16 @@ CROSS=aarch64-none-elf
 BUILD_DIR=build
 
 mkdir -p $BUILD_DIR
+mkdir -p $BUILD_DIR/kernel
 
 # Compile Zig source to object file
-$ZIG build-obj src/main.zig -target aarch64-freestanding-none -O Debug -fno-stack-protector  -femit-bin=$BUILD_DIR/main.o -mcpu=generic+strict_align
+$ZIG build-obj src/kernel/main.zig -target aarch64-freestanding-none -O Debug -fno-stack-protector  -femit-bin=$BUILD_DIR/kernel/main.o -mcpu=generic+strict_align
 
 # Assemble startup
-$CROSS-as -c src/boot.s -o $BUILD_DIR/boot.o
+$CROSS-as -c src/kernel/boot.s -o $BUILD_DIR/kernel/boot.o
 
 # Link everything
-$CROSS-ld -T src/linker.ld $BUILD_DIR/boot.o $BUILD_DIR/main.o -o $BUILD_DIR/kernel.elf
+$CROSS-ld -T src/linker.ld $BUILD_DIR/kernel/boot.o $BUILD_DIR/kernel/main.o -o $BUILD_DIR/kernel.elf
 
 # Optional: make binary
 $CROSS-objcopy -O binary $BUILD_DIR/kernel.elf $BUILD_DIR/kernel.bin
