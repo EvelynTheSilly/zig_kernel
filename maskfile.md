@@ -66,7 +66,6 @@ mask run
 > run with debugger
 
 ~~~sh
-echo "building"
 mask build
 echo "running vm"
 echo "exit with ctrl a, then x"
