@@ -66,6 +66,8 @@ mask run
 > run with debugger
 
 ~~~sh
+echo "building"
+mask build
 echo "running vm"
 echo "exit with ctrl a, then x"
 echo "run mask dbg_attatch to attatch to the debugger"
