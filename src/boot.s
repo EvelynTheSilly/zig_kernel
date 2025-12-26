@@ -84,125 +84,168 @@ el1_start:
 .global _vector_table
 _vector_table:
 
-// ========== Exceptions from EL0 ==========
-el0_sync:
-    DUMP_REGISTERS
-
-    bl el0_sync_handler
-
-    LOAD_REGISTERS
-
-    eret
-    .space 128 - (. - el0_sync)
-
-el0_irq:
-    DUMP_REGISTERS
-
-    bl el0_irq_handler
-
-    LOAD_REGISTERS
-
-    eret
-    .space 128 - (. - el0_irq)
-
-el0_fiq:
-    DUMP_REGISTERS
-
-    bl el0_fiq_handler
-
-    LOAD_REGISTERS
-
-    eret
-    .space 128 - (. - el0_fiq)
-
-el0_serror:
-    DUMP_REGISTERS
-
-    bl el0_serror_handler
-
-    LOAD_REGISTERS
-
-    eret
-    .space 128 - (. - el0_serror)
-
 // ========== Exceptions from EL1 ==========
-el1_sync:
+// ================== sp0 ==================
+el1_sp0_sync:
     DUMP_REGISTERS
 
-    bl el1_sync_handler
+    bl el1_sp0_sync_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el1_sync)
+    .space 128 - (. - el1_sp0_sync)
 
-el1_irq:
+el1_sp0_irq:
     DUMP_REGISTERS
 
-    bl el1_irq_handler
+    bl el1_sp0_irq_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el1_irq)
+    .space 128 - (. - el1_sp0_irq)
 
-el1_fiq:
+el1_sp0_fiq:
     DUMP_REGISTERS
 
-    bl el1_fiq_handler
+    bl el1_sp0_fiq_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el1_fiq)
+    .space 128 - (. - el1_sp0_fiq)
 
-el1_serror:
+el1_sp0_serror:
     DUMP_REGISTERS
 
-    bl el1_serror_handler
+    bl el1_sp0_serror_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el1_serror)
+    .space 128 - (. - el1_sp0_serror)
 
-// ========== Exceptions from EL2 ==========
-el2_sync:
+// ================== spx ==================
+el1_spx_sync:
     DUMP_REGISTERS
 
-    bl el2_sync_handler
+    bl el1_spx_sync_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el2_sync)
+    .space 128 - (. - el1_spx_sync)
 
-el2_irq:
+el1_spx_irq:
     DUMP_REGISTERS
 
-    bl el2_irq_handler
+    bl el1_spx_irq_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el2_irq)
+    .space 128 - (. - el1_spx_irq)
 
-el2_fiq:
+el1_spx_fiq:
     DUMP_REGISTERS
 
-    bl el2_fiq_handler
+    bl el1_spx_fiq_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el2_fiq)
+    .space 128 - (. - el1_spx_fiq)
 
-el2_serror:
+el1_spx_serror:
     DUMP_REGISTERS
 
-    bl el2_serror_handler
+    bl el1_spx_serror_handler
 
     LOAD_REGISTERS
 
     eret
-    .space 128 - (. - el2_serror)
+    .space 128 - (. - el1_spx_serror)
+
+// ========== Exceptions from EL0 ==========
+// ================ AArch64 ================
+el0_aarch64_sync:
+    DUMP_REGISTERS
+
+    bl el0_aarch64_sync_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch64_sync)
+
+el0_aarch64_irq:
+    DUMP_REGISTERS
+
+    bl el0_aarch64_irq_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch64_irq)
+
+el0_aarch64_fiq:
+    DUMP_REGISTERS
+
+    bl el0_aarch64_fiq_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch64_fiq)
+
+el0_aarch64_serror:
+    DUMP_REGISTERS
+
+    bl el0_aarch64_serror_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch64_serror)
+
+// ================ AArch32 ================
+el0_aarch32_sync:
+    DUMP_REGISTERS
+
+    bl el0_aarch32_sync_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch32_sync)
+
+el0_aarch32_irq:
+    DUMP_REGISTERS
+
+    bl el0_aarch32_irq_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch32_irq)
+
+el0_aarch32_fiq:
+    DUMP_REGISTERS
+
+    bl el0_aarch32_fiq_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch32_fiq)
+
+el0_aarch32_serror:
+    DUMP_REGISTERS
+
+    bl el0_aarch32_serror_handler
+
+    LOAD_REGISTERS
+
+    eret
+    .space 128 - (. - el0_aarch32_serror)
