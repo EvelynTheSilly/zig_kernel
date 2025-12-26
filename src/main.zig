@@ -50,7 +50,7 @@ const aligned_alloc = struct {
     var buffer: [1024 * 1024]u8 align(16) = undefined;
 };
 
-fn drop_to_el1() noreturn {
+fn drop_to_el1() void {
     asm volatile (
         \\                          //set up stack pointer for EL0
         \\ ldr x0, =el0_stack_top
@@ -72,6 +72,7 @@ pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     println("welcome!");
     uart.UARTWriter.print("this is a hello world example!\n", .{}) catch @panic("failed to print line");
     println("now i will fire an interupt");
+    drop_to_el1();
 }
 
 // Basic panic _handler
