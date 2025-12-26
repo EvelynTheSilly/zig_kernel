@@ -44,8 +44,8 @@ _Reset:                                     // starts in el2
 
 .global el0_start
 el0_start:
-    mov x0, #42                             // example syscall argument
-    svc #0                                  // triggers synchronous exception to EL1
+    mov x0, #69                             // example syscall argument
+    svc #42                                 // triggers synchronous exception to EL1
     b .
 
 .global el1_start
