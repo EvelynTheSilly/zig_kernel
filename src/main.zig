@@ -1,6 +1,7 @@
 pub const panic = std.debug.FullPanic(kernel_panic);
 const std = @import("std");
 const uart = @import("uart.zig");
+const syscalls = @import("syscalls.zig");
 const println = @import("uart.zig").println;
 
 // Simple memcpy implementation
@@ -49,10 +50,7 @@ const aligned_alloc = struct {
     var buffer: [1024 * 1024]u8 align(16) = undefined;
 };
 
-pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    println("welcome!");
-    uart.UARTWriter.print("this is a hello world example!", .{}) catch @panic("failed to print line");
-    println("now i will fire an interupt");
+fn drop_to_el1() noreturn {
     asm volatile (
         \\                          //set up stack pointer for EL0
         \\ ldr x0, =el0_stack_top
@@ -67,7 +65,13 @@ pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
         \\ msr elr_el1, x2
         \\ eret                     // jumps into EL0
     );
+}
+
+pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+    _ = syscalls;
     println("welcome!");
+    uart.UARTWriter.print("this is a hello world example!\n", .{}) catch @panic("failed to print line");
+    println("now i will fire an interupt");
 }
 
 // Basic panic _handler
@@ -85,74 +89,4 @@ pub fn kernel_panic(msg: []const u8, _: ?usize) noreturn {
     while (true) {
         asm volatile ("wfi");
     }
-}
-
-// current el interupts
-// sp0
-pub export fn el1_sp0_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel sp0 sync interupt");
-}
-
-pub export fn el1_sp0_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel sp0 irq interupt");
-}
-
-pub export fn el1_sp0_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel sp0 fiq interupt");
-}
-
-pub export fn el1_sp0_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel sp0 serror interupt");
-}
-
-// spx
-pub export fn el1_spx_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel spx sync interupt");
-}
-
-pub export fn el1_spx_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel spx irq interupt");
-}
-
-pub export fn el1_spx_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel spx fiq interupt");
-}
-
-pub export fn el1_spx_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("kernel spx serror interupt");
-}
-
-// lower el interupts
-// aarch64
-pub export fn el0_aarch64_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch64 sync interupt");
-}
-
-pub export fn el0_aarch64_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch64 irq interupt");
-}
-
-pub export fn el0_aarch64_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch64 fiq interupt");
-}
-
-pub export fn el0_aarch64_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch64 serror interupt");
-}
-
-// aarch32
-pub export fn el0_aarch32_sync_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch32 sync interupt");
-}
-
-pub export fn el0_aarch32_irq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch32 irq interupt");
-}
-
-pub export fn el0_aarch32_fiq_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch32 fiq interupt");
-}
-
-pub export fn el0_aarch32_serror_handler() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    @panic("user aarch32 serror interupt");
 }
