@@ -1,13 +1,31 @@
-# bare metal zig kernel
-based on [aarch64-bare-metal-qemu](https://github.com/freedomtan/aarch64-bare-metal-qemu/tree/master)
+# EstrOS
+a kernel/operating system written in zig 
 
-adapted into zig by eve
+## why?
+originally i got inspired to work on this 
 
-works on elbow greace and magic
+## developing
+<sub>why would anyone ever wanna use this but me :thinking:</sub>
 
+enter the dev environment
+~~~sh
+nix develop # if you dont use nix.... too bad? you can find the package list in the flake
+~~~
 run with
 ~~~sh
-nix develop # to enter dev environment
-mask build # builds project
-mask run # runs the vm using qemu
+mask cbr # cleans/builds/runs the project
 ~~~
+debug with 
+~~~sh
+# terminal 1
+mask debug
+
+# terminal 2
+mask start_gdb
+~~~
+
+## credits
+- based on [aarch64-bare-metal-qemu](https://github.com/freedomtan/aarch64-bare-metal-qemu/tree/master)
+- adapted into zig by evelyn
+- name by evelyn (not the same evelyn as above)
+- heavily insipired to do any of this in the first place by [developed from scratch](https://www.youtube.com/@DevelopedFromScratch)
