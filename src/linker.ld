@@ -10,6 +10,9 @@ SECTIONS
     .vectors ALIGN(11): {
         KEEP(*(.vectors))
     }
+    .rodata : {
+        *(.rodata)
+    }
 	. = . + 0x100000; /* 4kB of stack memory */
 	. = ALIGN(16);
 	el2_stack_top = .;

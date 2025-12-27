@@ -2,7 +2,9 @@
 /// codes:
 /// - 1 success
 /// - -1 error
+const print_buffer = @import("../uart.zig").print_uart_buffer;
+
 pub fn uart_print(str: []const u8) i64 {
-    _ = str; // autofix
+    print_buffer(str);
     return -1;
 }

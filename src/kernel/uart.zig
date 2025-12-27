@@ -9,7 +9,7 @@ const UART_FLAG_RXFE: u8 = (1 << 4); // flag register bitmask (00010000)
 const UART_INTERRUPT_MASK_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x38); // Interrupt mask register (optional)
 const UART_INTERRUPT_CLEAR_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x44); // Interrupt clear register (optional)
 
-fn print_uart_buffer(msg: []const u8) void {
+pub fn print_uart_buffer(msg: []const u8) void {
     for (msg) |c| {
         print_uart_char(c);
     }

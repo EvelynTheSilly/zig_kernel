@@ -1,4 +1,5 @@
 const println = @import("uart.zig").println;
+const uart = @import("uart.zig");
 const syscalls = @import("syscalls/mod.zig");
 
 // current el interupts
@@ -52,11 +53,13 @@ pub export fn el0_aarch64_sync_handler(
     arg6: i64, // arg 6
     arg7: i64, // arg 7
 ) align(16) callconv(.c) i64 {
-    _ = arg3; // autofix, stops "unused function arguments" errors via explicit discarding
-    _ = arg4; // autofix, stops "unused function arguments" errors via explicit discarding
-    _ = arg5; // autofix, stops "unused function arguments" errors via explicit discarding
-    _ = arg6; // autofix, stops "unused function arguments" errors via explicit discarding
-    _ = arg7; // autofix, stops "unused function arguments" errors via explicit discarding
+    _ = arg3; // autofix
+    _ = arg4; // autofix
+    _ = arg5; // autofix
+    _ = arg6; // autofix
+    _ = arg7; // autofix
+    //uart.UARTWriter.print("recieved syscall {}\n", .{arg0}) catch @panic("failed to print");
+    //uart.UARTWriter.print("--- arg dump: --- \n{}\n{}\n{}\n{}\n{}\n{}\n{}\n", .{ arg1, arg2, arg3, arg4, arg5, arg6, arg7 }) catch @panic("failed to print");
     const return_value: i64 = switch (arg0) {
         // requires arg1 to be a pointer to a array u8s and len to be the length of said array
         1 => syscalls.uart_print(@as([*]const u8, @ptrFromInt(@as(usize, @bitCast(arg1))))[0..@as(usize, @bitCast(arg2))]),
@@ -65,7 +68,8 @@ pub export fn el0_aarch64_sync_handler(
         // invalid ID, returns -1 as error code for that
         else => -1,
     };
-    println("hello, this is an interupt, it will now return");
+    println("");
+    println("leaving interupt");
     return return_value;
 }
 
