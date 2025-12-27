@@ -59,11 +59,11 @@ pub export fn el0_aarch64_sync_handler(
     _ = arg7; // autofix, stops "unused function arguments" errors via explicit discarding
     const return_value: i64 = switch (arg0) {
         // requires arg1 to be a pointer to a array u8s and len to be the length of said array
-        1 => syscalls.uart_print(@as([]const u8, .{ .ptr = arg1, .len = arg2 })),
+        1 => syscalls.uart_print(@as([*]const u8, @ptrFromInt(@as(usize, @bitCast(arg1))))[0..@as(usize, @bitCast(arg2))]),
         // The answer to life, the universe, and everything /j
         42 => 42,
         // invalid ID, returns -1 as error code for that
-        _ => -1,
+        else => -1,
     };
     println("hello, this is an interupt, it will now return");
     return return_value;
