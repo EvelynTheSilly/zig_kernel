@@ -1,7 +1,7 @@
 pub const panic = std.debug.FullPanic(kernel_panic);
 const std = @import("std");
 const uart = @import("uart.zig");
-const syscalls = @import("syscalls.zig");
+const interupts = @import("interupts.zig");
 const println = @import("uart.zig").println;
 
 // Simple memcpy implementation
@@ -68,7 +68,7 @@ fn drop_to_el1() void {
 }
 
 pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    _ = syscalls;
+    _ = interupts;
     println("welcome!");
     uart.UARTWriter.print("this is a hello world example!\n", .{}) catch @panic("failed to print line");
     println("now i will fire an interupt");
