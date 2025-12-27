@@ -38,7 +38,10 @@ pub export fn el1_spx_serror_handler() align(16) callconv(.c) void {
 
 // lower el interupts
 // aarch64
-// MAIN SYSCALL HANDLER
+/// MAIN SYSCALL HANDLER
+/// syscall convention:
+/// - x0 syscall id
+/// - x1-7 args, all pointer sized
 pub export fn el0_aarch64_sync_handler(
     arg0: i64, // syscall ID
     arg1: i64, // arg 1
@@ -49,14 +52,14 @@ pub export fn el0_aarch64_sync_handler(
     arg6: i64, // arg 6
     arg7: i64, // arg 7
 ) align(16) callconv(.c) i64 {
-    _ = arg1; // autofix
-    _ = arg2; // autofix
-    _ = arg3; // autofix
-    _ = arg4; // autofix
-    _ = arg5; // autofix
-    _ = arg6; // autofix
-    _ = arg7; // autofix
-    const return_value = switch (arg0) {
+    _ = arg3; // autofix, stops "unused function arguments" errors via explicit discarding
+    _ = arg4; // autofix, stops "unused function arguments" errors via explicit discarding
+    _ = arg5; // autofix, stops "unused function arguments" errors via explicit discarding
+    _ = arg6; // autofix, stops "unused function arguments" errors via explicit discarding
+    _ = arg7; // autofix, stops "unused function arguments" errors via explicit discarding
+    const return_value: i64 = switch (arg0) {
+        // requires arg1 to be a pointer to a array u8s and len to be the length of said array
+        1 => syscalls.uart_print(@as([]const u8, .{ .ptr = arg1, .len = arg2 })),
         // The answer to life, the universe, and everything /j
         42 => 42,
         // invalid ID, returns -1 as error code for that
