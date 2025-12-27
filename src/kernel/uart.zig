@@ -11,7 +11,7 @@ const UART_INTERRUPT_CLEAR_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x44
 
 fn print_uart_buffer(msg: []const u8) void {
     for (msg) |c| {
-        UART_DATA_REGISTER.* = c;
+        print_uart_char(c);
     }
 }
 
