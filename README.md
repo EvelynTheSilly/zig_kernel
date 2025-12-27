@@ -2,7 +2,7 @@
 a kernel/operating system written in zig 
 
 ## why?
-originally i got inspired to work on this 
+originally i got inspired to work on this by @DevelopedFromScratch on youtube, however nowdays i work on this to help me mentally, no matter how much time passes this project always makes me happy whenever i get sucked into it 
 
 ## developing
 <sub>why would anyone ever wanna use this but me :thinking:</sub>
