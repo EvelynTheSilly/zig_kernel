@@ -5,28 +5,58 @@
 
 > Builds my project
 
-~~~sh
+~~~bash
 mask clean
 echo "building project..."
 set -e
+shopt -s globstar
 
-ZIG=zig
+# Define global paths
+export SRC_ROOT=$(pwd)
+export BUILD_DIR=$SRC_ROOT/build
+export OUT_DIR=$BUILD_DIR/out
+export BYPRODUCTS_DIR=$BUILD_DIR/byproducts
+
+
+# 1. Load Configuration 
+if [ -f "config.sh" ]; then
+    source ./config.sh
+else
+    echo "Error: config.sh not found!" && exit 1
+fi 
+
+build_dir() {
+    local dir=$1
+    local rel_path=${dir#$SRC_ROOT/}
+    
+    # Define unique paths for this component (The "Nix" style)
+    export OUT="$OUT_DIR/" #$rel_path"
+    export BYPRODUCTS="$BYPRODUCTS_DIR/$rel_path"
+    
+    mkdir -p "$OUT" "$BYPRODUCTS"
+    
+    # Run the local build script
+    echo "building $dir"
+    (cd "$dir" && ./build.sh)
+}
+
+mkdir -p "$BUILD_DIR" "$OUT_DIR" "$BYPRODUCTS_DIR"
+
+build_dir src/kernel
+build_dir $INIT
+
+echo "out: $OUT_DIR"
+echo "out: $BUILD_DIR"
+echo "out: $BYPRODUCTS_DIR"
+ls -l "$OUT_DIR/kernel.o"
 CROSS=aarch64-none-elf
-BUILD_DIR=build
-
-mkdir -p $BUILD_DIR
-mkdir -p $BUILD_DIR/kernel
-
-# Compile Zig source to object file
-$ZIG build-obj src/kernel/main.zig -target aarch64-freestanding-none -O Debug -fno-stack-protector  -femit-bin=$BUILD_DIR/kernel/main.o -mcpu=generic+strict_align
-
-# Assemble startup
-$CROSS-as -c src/kernel/boot.s -o $BUILD_DIR/kernel/boot.o
 
 # Link everything
-$CROSS-ld -T src/linker.ld $BUILD_DIR/kernel/boot.o $BUILD_DIR/kernel/main.o -o $BUILD_DIR/kernel.elf
+echo "link"
+$CROSS-ld -T src/linker.ld ${OUT_DIR#$SRC_ROOT/}/*.o -o $BUILD_DIR/kernel.elf
 
 # Optional: make binary
+echo "objcopy"
 $CROSS-objcopy -O binary $BUILD_DIR/kernel.elf $BUILD_DIR/kernel.bin
 ~~~
 

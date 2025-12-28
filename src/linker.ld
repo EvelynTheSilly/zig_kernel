@@ -3,7 +3,7 @@ SECTIONS
 {
 	. = ALIGN(16);
 	. = 0x40000000;
-	.startup . : { build/kernel/boot.o(.text) }
+	.startup . : { build/out/kernel.o(.text) }
 	.text : { *(.text) }
 	.data : { *(.data) }
 	.bss : { *(.bss COMMON) }
