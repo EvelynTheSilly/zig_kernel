@@ -38,6 +38,7 @@ build_dir() {
     # Run the local build script
     echo "building $dir"
     (cd "$dir" && ./build.sh)
+    echo "built $dir"
 }
 
 mkdir -p "$BUILD_DIR" "$OUT_DIR" "$BYPRODUCTS_DIR"

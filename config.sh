@@ -1,1 +1,1 @@
-export INIT="src/userspace/example"
+export INIT="src/userspace/zig_hello_world"
