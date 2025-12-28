@@ -10,13 +10,13 @@ hello_msg_end:
     .equ hello_msg_len, hello_msg_end - hello_msg
 
 .section .text
-.global el0_start
+.global _INIT
 
 /* el0_start
    Entry point for EL0 code.
    Assumes the stack pointer (SP_EL0) is already set up by the bootloader/kernel.
 */
-el0_start:
+_INIT:
     /* 1. Set x0 = 1
        Context: Typically File Descriptor 1 (stdout)
     */

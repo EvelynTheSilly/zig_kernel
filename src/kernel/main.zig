@@ -61,7 +61,7 @@ fn drop_to_el1() void {
         \\ mov x1, #0               // SPSR_EL1 value
         \\ msr spsr_el1, x1         // SPSR_EL1 = EL0 flags
         \\                          // set ELR_EL1 = address of first instruction in EL0
-        \\ ldr x2, =el0_start
+        \\ ldr x2, =_INIT
         \\ msr elr_el1, x2
         \\ eret                     // jumps into EL0
     );
