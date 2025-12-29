@@ -4,7 +4,7 @@
 /// - -1 error
 const print_buffer = @import("../uart.zig").print_uart_buffer;
 
-pub fn uart_print(str: []const u8) i64 {
+pub fn uart_print(str: []const u8) isize {
     print_buffer(str);
-    return -1;
+    return 1;
 }
