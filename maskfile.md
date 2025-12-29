@@ -45,6 +45,7 @@ mkdir -p "$BUILD_DIR" "$OUT_DIR" "$BYPRODUCTS_DIR"
 
 build_dir src/kernel
 build_dir $INIT
+build_dir src/lib/LibEstrogen
 
 echo "out: $OUT_DIR"
 echo "out: $BUILD_DIR"

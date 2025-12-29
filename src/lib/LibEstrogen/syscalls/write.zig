@@ -2,9 +2,6 @@ pub fn write(buf: []const u8) isize {
     const id: usize = 1; // syscall id for write
 
     return asm volatile (
-    //\\ mov x0, {id}
-    //\\ mov x1, {ptr}
-    //\\ mov x2, {len}
         \\ svc #0
         : [ret] "=&{x0}" (-> isize),
         : [id] "{x0}" (id),

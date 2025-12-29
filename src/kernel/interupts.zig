@@ -64,7 +64,7 @@ pub export fn el0_aarch64_sync_handler(
         // write, requires arg1 to be a pointer to a array u8s and len to be the length of said array
         1 => syscalls.uart_print(@as([*]const u8, @ptrFromInt(arg1))[0..arg2]),
         // read, pass in a buffer, and the amount you want to read, returns amount of bytes read
-        2 => syscalls.uart_read(@as([*]const u8, @ptrFromInt(arg1))[0..arg2]),
+        2 => syscalls.uart_read(@as([*]u8, @ptrFromInt(arg1))[0..arg2]),
         // The answer to life, the universe, and everything /j
         42 => 42,
         // invalid ID, returns -1 as error code for that

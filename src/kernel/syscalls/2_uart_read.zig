@@ -3,7 +3,7 @@ const uart_has_input = @import("../uart.zig").uart_has_input;
 const uart_read_char = @import("../uart.zig").uart_read_char;
 
 // In your kernel's syscall handler
-pub fn uart_read(buffer: []u8) usize {
+pub fn uart_read(buffer: []u8) isize {
     var bytes_read: usize = 0;
 
     // While the UART has data AND we haven't filled the user's buffer
@@ -13,5 +13,5 @@ pub fn uart_read(buffer: []u8) usize {
     }
 
     // Return how many bytes we actually put in the buffer
-    return bytes_read;
+    return @intCast(bytes_read);
 }
