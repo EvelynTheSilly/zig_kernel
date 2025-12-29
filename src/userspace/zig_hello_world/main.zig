@@ -8,7 +8,7 @@ export fn _INIT() void {
     }
 }
 
-pub fn write(buf: []const u8) usize {
+pub fn write(buf: []const u8) isize {
     const id: usize = 1; // syscall id for write
 
     return asm volatile (
@@ -16,7 +16,7 @@ pub fn write(buf: []const u8) usize {
     //\\ mov x1, {ptr}
     //\\ mov x2, {len}
         \\ svc #0
-        : [ret] "=&{x0}" (-> usize),
+        : [ret] "=&{x0}" (-> isize),
         : [id] "{x0}" (id),
           [ptr] "{x1}" (buf.ptr),
           [len] "{x2}" (buf.len),

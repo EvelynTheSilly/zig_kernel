@@ -44,15 +44,15 @@ pub export fn el1_spx_serror_handler() align(16) callconv(.c) void {
 /// - x0 syscall id
 /// - x1-7 args, all pointer sized
 pub export fn el0_aarch64_sync_handler(
-    arg0: i64, // syscall ID
-    arg1: i64, // arg 1
-    arg2: i64, // arg 2
-    arg3: i64, // arg 3
-    arg4: i64, // arg 4
-    arg5: i64, // arg 5
-    arg6: i64, // arg 6
-    arg7: i64, // arg 7
-) align(16) callconv(.c) i64 {
+    arg0: usize, // syscall ID
+    arg1: usize, // arg 1
+    arg2: usize, // arg 2
+    arg3: usize, // arg 3
+    arg4: usize, // arg 4
+    arg5: usize, // arg 5
+    arg6: usize, // arg 6
+    arg7: usize, // arg 7
+) align(16) callconv(.c) isize {
     _ = arg3; // autofix
     _ = arg4; // autofix
     _ = arg5; // autofix
@@ -60,9 +60,9 @@ pub export fn el0_aarch64_sync_handler(
     _ = arg7; // autofix
     //uart.UARTWriter.print("recieved syscall {}\n", .{arg0}) catch @panic("failed to print");
     //uart.UARTWriter.print("--- arg dump: --- \n{}\n{}\n{}\n{}\n{}\n{}\n{}\n", .{ arg1, arg2, arg3, arg4, arg5, arg6, arg7 }) catch @panic("failed to print");
-    const return_value: i64 = switch (arg0) {
+    const return_value: isize = switch (arg0) {
         // requires arg1 to be a pointer to a array u8s and len to be the length of said array
-        1 => syscalls.uart_print(@as([*]const u8, @ptrFromInt(@as(usize, @bitCast(arg1))))[0..@as(usize, @bitCast(arg2))]),
+        1 => syscalls.uart_print(@as([*]const u8, @ptrFromInt(arg1))[0..arg2]),
         // The answer to life, the universe, and everything /j
         42 => 42,
         // invalid ID, returns -1 as error code for that
