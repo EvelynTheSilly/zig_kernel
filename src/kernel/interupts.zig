@@ -61,8 +61,10 @@ pub export fn el0_aarch64_sync_handler(
     //uart.UARTWriter.print("recieved syscall {}\n", .{arg0}) catch @panic("failed to print");
     //uart.UARTWriter.print("--- arg dump: --- \n{}\n{}\n{}\n{}\n{}\n{}\n{}\n", .{ arg1, arg2, arg3, arg4, arg5, arg6, arg7 }) catch @panic("failed to print");
     const return_value: isize = switch (arg0) {
-        // requires arg1 to be a pointer to a array u8s and len to be the length of said array
+        // write, requires arg1 to be a pointer to a array u8s and len to be the length of said array
         1 => syscalls.uart_print(@as([*]const u8, @ptrFromInt(arg1))[0..arg2]),
+        // read, pass in a buffer, and the amount you want to read, returns amount of bytes read
+        2 => syscalls.uart_read(@as([*]const u8, @ptrFromInt(arg1))[0..arg2]),
         // The answer to life, the universe, and everything /j
         42 => 42,
         // invalid ID, returns -1 as error code for that

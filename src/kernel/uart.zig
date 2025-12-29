@@ -24,7 +24,7 @@ pub fn println(msg: []const u8) void {
     print_uart_char('\n'); // newline
 }
 
-fn uart_read_char() u8 {
+pub fn uart_read_char() u8 {
     while (!uart_has_input()) {}
     return UART_DATA_REGISTER.*;
 }
@@ -74,7 +74,7 @@ fn readFn(_: *const anyopaque, buffer: []u8) anyerror!usize {
     return count;
 }
 
-fn uart_has_input() bool {
+pub fn uart_has_input() bool {
     return (UART_FLAG_REGISTER.* & UART_FLAG_RXFE) == 0; // apply the bitmask to the value in the register
 }
 
