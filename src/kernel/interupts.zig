@@ -70,8 +70,6 @@ pub export fn el0_aarch64_sync_handler(
         // invalid ID, returns -1 as error code for that
         else => -1,
     };
-    println("");
-    println("leaving interupt");
     return return_value;
 }
 

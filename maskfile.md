@@ -101,7 +101,7 @@ mask run
 mask build
 echo "running vm"
 echo "exit with ctrl a, then x"
-echo "run mask dbg_attatch to attatch to the debugger"
+echo "run mask start_gdb to attatch to the debugger"
 echo ""
 echo ""
 qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -kernel ./build/kernel.elf -S -s
@@ -112,6 +112,5 @@ qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -kernel ./build/kernel.el
 > attatch with debugger
 
 ~~~sh
-mask build
 aarch64-none-elf-gdb -ex "target remote :1234" -ex "symbol-file build/kernel.elf"
 ~~~
