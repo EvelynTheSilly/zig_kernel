@@ -6,6 +6,7 @@ const UART_BASE: u64 = 0x09000000;
 const UART_DATA_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x00); // Data register (read/write)
 const UART_FLAG_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x18); // Flag register
 const UART_FLAG_RXFE: u8 = (1 << 4); // flag register bitmask (00010000)
+const UART_FLAG_BUSY: u8 = (1 << 3); // flag register bitmask (00010000)
 const UART_INTERRUPT_MASK_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x38); // Interrupt mask register (optional)
 const UART_INTERRUPT_CLEAR_REGISTER: *volatile u8 = @ptrFromInt(UART_BASE + 0x44); // Interrupt clear register (optional)
 
@@ -27,6 +28,31 @@ pub fn println(msg: []const u8) void {
 pub fn uart_read_char() u8 {
     while (!uart_has_input()) {}
     return UART_DATA_REGISTER.*;
+}
+
+pub fn uart_read_char_nonblocking() ?u8 {
+    if (uart_has_input()) {
+        return UART_DATA_REGISTER.*;
+    } else {
+        return null;
+    }
+}
+
+pub fn readuntil(char: u8, buffer: []u8) !usize {
+    if (buffer.len == 0) return 0;
+    var index: usize = 0;
+    while (index < buffer.len) {
+        const byte: ?u8 = uart_read_char_nonblocking();
+        if (byte) |b| {
+            index += 1;
+            _ = print_uart_char(b);
+            buffer[index] = b;
+            if (b == char) {
+                break;
+            }
+        } else {}
+    }
+    return index;
 }
 
 fn print_uart(msg: std.ArrayList(u8)) void {
@@ -76,6 +102,10 @@ fn readFn(_: *const anyopaque, buffer: []u8) anyerror!usize {
 
 pub fn uart_has_input() bool {
     return (UART_FLAG_REGISTER.* & UART_FLAG_RXFE) == 0; // apply the bitmask to the value in the register
+}
+
+pub fn uart_is_busy() bool {
+    return (UART_DATA_REGISTER.* & UART_FLAG_BUSY) == 1;
 }
 
 fn readByteBlocking() u8 {

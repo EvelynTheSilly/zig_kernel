@@ -41,14 +41,15 @@ pub fn readbyte() ?u8 {
 pub fn readuntil(char: u8, buffer: []u8) !usize {
     if (buffer.len == 0) return 0;
     var index: usize = 0;
-    while (index < buffer.len) : (index += 1) {
-        const byte: ?u8 = readbyte() orelse null;
+    while (index < buffer.len) {
+        const byte: ?u8 = readbyte();
         if (byte) |b| {
+            index += 1;
             _ = try printbyte(b);
+            buffer[index] = b;
             if (b == char) {
                 return index;
             }
-            buffer[index] = b;
         } else {}
     }
     return index;

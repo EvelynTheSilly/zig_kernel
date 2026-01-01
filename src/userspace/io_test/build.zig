@@ -1,12 +1,21 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) !void {
+    const features = std.Target.aarch64.Feature;
+    const disabled_features = std.Target.aarch64.featureSet(&.{
+        features.fp_armv8,
+        features.neon,
+        // You might also need to disable crypto if strict no-vector is required
+        features.crypto,
+    });
+
     const target_query = std.Target.Query{
         .cpu_arch = .aarch64,
         .os_tag = .freestanding,
         .abi = .none,
         .cpu_model = .{ .explicit = &std.Target.aarch64.cpu.generic },
         .cpu_features_add = std.Target.aarch64.featureSet(&.{.strict_align}),
+        .cpu_features_sub = disabled_features,
     };
     const target = b.resolveTargetQuery(target_query);
     const optimize = .Debug;

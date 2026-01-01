@@ -72,7 +72,6 @@ pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     println("booting up ESTROS");
     println("dont forget to take your meds :3");
     println("");
-
     println("");
     println("-------------------");
     println(" welcome to ESTROS");

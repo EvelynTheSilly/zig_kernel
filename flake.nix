@@ -32,6 +32,7 @@
             pkgs.mask
             pkgs.zig
             pkgs.zls
+            pkgs.cloc
           ];
 
           shellHook = ''
