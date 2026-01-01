@@ -48,9 +48,10 @@ pub fn readuntil(char: u8, buffer: []u8) !usize {
             _ = try printbyte(b);
             buffer[index] = b;
             if (b == char) {
-                return index;
+                break;
             }
         } else {}
     }
+    _ = try printbyte('\n');
     return index;
 }
