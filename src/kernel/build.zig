@@ -20,12 +20,15 @@ pub fn build(b: *std.Build) !void {
     const optimize = .Debug;
 
     const libestrogen_module = b.createModule(.{
-        .root_source_file = b.path("../../lib/LibEstrogen/lib.zig"),
+        .root_source_file = b.path("../lib/LibEstrogen/lib.zig"),
+    });
+    const libc_module = b.createModule(.{
+        .root_source_file = b.path("../lib/libc/lib.zig"),
     });
 
     // 3. define object file for our outputs
     const obj = b.addObject(.{
-        .name = "userspace", // Output will likely be userspace.o
+        .name = "kernel",
         .root_module = b.createModule(.{ .root_source_file = b.path("main.zig"), .target = target, .optimize = optimize }),
     });
     obj.root_module.stack_protector = false;
@@ -33,11 +36,12 @@ pub fn build(b: *std.Build) !void {
     // 4. Link the module
     // This allows @import("lib") inside userspace code
     obj.root_module.addImport("LibEstrogen", libestrogen_module);
+    obj.root_module.addImport("Libc", libc_module);
 
     // 5. Handle the Output Directory via Env Var
     // We attempt to grab the specific ENV var you use currently.
     const env_map = try std.process.getEnvMap(b.allocator);
-    const output_dir = env_map.get("OUT") orelse "/dev/zero";
+    const output_dir = env_map.get("BYPRODUCTS") orelse "/dev/zero";
 
     // 6. Custom Install Step
     // Standard b.install() enforces a directory structure (bin/ lib/).
@@ -49,6 +53,7 @@ pub fn build(b: *std.Build) !void {
     // Trigger the install
     b.getInstallStep().dependOn(&install_step.step);
 
+    // lsp check step
     const check_step = b.step("check", "Check compilation");
     check_step.dependOn(&obj.step);
 }

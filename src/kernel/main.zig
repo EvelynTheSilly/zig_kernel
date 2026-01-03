@@ -4,45 +4,8 @@ const uart = @import("uart.zig");
 const interupts = @import("interupts.zig");
 const println = @import("uart.zig").println;
 
-// Simple memcpy implementation
-pub export fn memcpy(dest: [*]u8, src: [*]const u8, n: usize) [*]u8 {
-    var i: usize = 0;
-    while (i < n) : (i += 1) {
-        dest[i] = src[i];
-    }
-    return dest;
-}
-
-// Simple memset implementation
-pub export fn memset(s: [*]u8, c: u8, n: usize) [*]u8 {
-    var i: usize = 0;
-    while (i < n) : (i += 1) {
-        s[i] = c;
-    }
-    return s;
-}
-
-// simple mem move implementation
-// the see me moving, they hating
-pub export fn memmove(dst: [*]u8, src: [*]const u8, n: usize) void {
-    if (dst == src or n == 0) return;
-
-    const dst_addr = @intFromPtr(dst);
-    const src_addr = @intFromPtr(src);
-
-    if (dst_addr < src_addr or dst_addr >= src_addr + n) {
-        // Non-overlapping or dst before src → copy forward
-        var i: usize = 0;
-        while (i < n) : (i += 1) {
-            dst[i] = src[i];
-        }
-    } else {
-        // Overlapping and dst > src → copy backward
-        var i: usize = n;
-        while (i > 0) : (i -= 1) {
-            dst[i - 1] = src[i - 1];
-        }
-    }
+comptime {
+    _ = interupts;
 }
 
 // 1mb heap buffer
@@ -68,7 +31,6 @@ fn drop_to_el1() void {
 }
 
 pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
-    _ = interupts;
     println("booting up ESTROS");
     println("dont forget to take your meds :3");
     println("");
