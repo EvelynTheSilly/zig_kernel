@@ -44,7 +44,6 @@ pub fn build(b: *std.Build) !void {
     const output_dir = env_map.get("BYPRODUCTS") orelse "/dev/zero";
 
     // 6. Custom Install Step
-    // Standard b.install() enforces a directory structure (bin/ lib/).
     const install_step = b.addInstallFile(obj.getEmittedBin(), "kernel.o");
 
     // We override the base prefix to be your environment variable path

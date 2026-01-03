@@ -2,7 +2,7 @@
 /// codes:
 /// - 1 success
 /// - -1 error
-const print_buffer = @import("../uart.zig").print_uart_buffer;
+const print_buffer = @import("../../uart.zig").print_uart_buffer;
 
 pub fn uart_print(str: []const u8) isize {
     print_buffer(str);

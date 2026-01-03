@@ -1,6 +1,6 @@
-const print_buffer = @import("../uart.zig").print_uart_buffer;
-const uart_has_input = @import("../uart.zig").uart_has_input;
-const uart_read_char = @import("../uart.zig").uart_read_char;
+const print_buffer = @import("../../uart.zig").print_uart_buffer;
+const uart_has_input = @import("../../uart.zig").uart_has_input;
+const uart_read_char = @import("../../uart.zig").uart_read_char;
 
 // In your kernel's syscall handler
 pub fn uart_read(buffer: []u8) isize {

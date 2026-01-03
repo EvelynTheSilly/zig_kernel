@@ -1,5 +1,5 @@
-const println = @import("uart.zig").println;
-const uart = @import("uart.zig");
+const println = @import("../uart.zig").println;
+const uart = @import("../uart.zig");
 const syscalls = @import("syscalls/mod.zig");
 
 // current el interupts

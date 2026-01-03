@@ -1,7 +1,7 @@
 pub const panic = std.debug.FullPanic(kernel_panic);
 const std = @import("std");
 const uart = @import("uart.zig");
-const interupts = @import("interupts.zig");
+const interupts = @import("interupts/interupts.zig");
 const println = @import("uart.zig").println;
 const libc = @import("Libc");
 
