@@ -23,7 +23,7 @@ pub fn build(b: *std.Build) !void {
         .root_source_file = b.path("../lib/LibEstrogen/lib.zig"),
     });
     const libc_module = b.createModule(.{
-        .root_source_file = b.path("../lib/libc/lib.zig"),
+        .root_source_file = b.path("../lib/Libc/lib.zig"),
     });
 
     // 3. define object file for our outputs
@@ -45,7 +45,7 @@ pub fn build(b: *std.Build) !void {
 
     // 6. Custom Install Step
     // Standard b.install() enforces a directory structure (bin/ lib/).
-    const install_step = b.addInstallFile(obj.getEmittedBin(), "userspace.o");
+    const install_step = b.addInstallFile(obj.getEmittedBin(), "kernel.o");
 
     // We override the base prefix to be your environment variable path
     b.install_path = output_dir;

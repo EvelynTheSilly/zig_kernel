@@ -3,8 +3,10 @@ const std = @import("std");
 const uart = @import("uart.zig");
 const interupts = @import("interupts.zig");
 const println = @import("uart.zig").println;
+const libc = @import("Libc");
 
 comptime {
+    _ = libc.export_symbols();
     _ = interupts;
 }
 
