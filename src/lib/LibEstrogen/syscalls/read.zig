@@ -4,9 +4,8 @@ pub fn read(buf: []u8) isize {
     return asm volatile (
         \\ svc #0
         : [ret] "=&{x0}" (-> isize),
-          //[mem] "=m" (buf.ptr[0..buf.len].*)
         : [id] "{x0}" (id),
           [ptr] "{x1}" (buf.ptr),
           [len] "{x2}" (buf.len),
-        : .{ .memory = true, .x0 = true, .x1 = true, .x2 = true, .x3 = true, .x4 = true, .x5 = true, .x6 = true, .x7 = true, .x8 = true, .x9 = true, .x10 = true, .x11 = true, .x12 = true, .x13 = true, .x14 = true, .x15 = true, .x16 = true, .x17 = true, .x18 = true });
+        : .{ .x0 = true, .x1 = true, .x2 = true, .x3 = true, .x4 = true, .x5 = true, .x6 = true, .x7 = true, .x8 = true, .x9 = true, .x10 = true, .x11 = true, .x12 = true, .x13 = true, .x14 = true, .x15 = true, .x16 = true, .x17 = true, .x18 = true });
 }
