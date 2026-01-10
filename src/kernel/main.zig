@@ -40,7 +40,7 @@ pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     println("-------------------");
     println(" welcome to ESTROS");
     println("-------------------");
-    println("starting init process :3");
+    println("starting userland init :3");
     println("");
     drop_to_el1();
 }
