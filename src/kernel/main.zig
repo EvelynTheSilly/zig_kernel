@@ -10,29 +10,7 @@ comptime {
     _ = interupts;
 }
 
-// 1mb heap buffer
-const aligned_alloc = struct {
-    var buffer: [1024 * 1024]u8 align(16) = undefined;
-};
-
-fn drop_to_el1() void {
-    asm volatile (
-        \\                          //set up stack pointer for EL0
-        \\ ldr x0, =el0_stack_top
-        \\ msr sp_el0, x0           // SP_EL0 = top of user stack
-        \\                          // set up SPSR_EL1 to enter EL0, using AArch64, interrupts masked
-        \\                          // M[4:2]=0b000 for EL0t
-        \\                          // D/I/A/F bits mask exceptions if needed
-        \\ mov x1, #0               // SPSR_EL1 value
-        \\ msr spsr_el1, x1         // SPSR_EL1 = EL0 flags
-        \\                          // set ELR_EL1 = address of first instruction in EL0
-        \\ ldr x2, =_INIT
-        \\ msr elr_el1, x2
-        \\ eret                     // jumps into EL0
-    );
-}
-
-pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
+pub export fn _entry() align(16) void {
     println("booting up ESTROS");
     println("dont forget to take your meds :3");
     println("");
@@ -42,7 +20,6 @@ pub export fn _entry() align(16) callconv(.{ .aarch64_aapcs = .{} }) void {
     println("-------------------");
     println("starting userland init :3");
     println("");
-    drop_to_el1();
 }
 
 // Basic panic _handler
