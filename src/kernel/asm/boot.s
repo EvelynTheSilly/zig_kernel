@@ -10,7 +10,8 @@ el1_start:
 
     // enter zig
     bl _entry                                // go to zig entry point
-    b .                                     // hang forever
+    b go_to_init_process                     // go to init
+    b .                                      // hang forever
 
 load_stack:
     ldr x0, =el1_stack_top
