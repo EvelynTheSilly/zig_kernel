@@ -1,6 +1,8 @@
-// phsysial memory manager
-//
+/// phsysial memory manager
+///
 const std = @import("std");
+const get_kernel_code_start = @import("shared.zig").get_kernel_code_start;
+const get_kernel_code_end = @import("shared.zig").get_kernel_code_end;
 
 const PAGE_SIZE = 4096; // 4kb
 const RAM_START = 0x40000000; // QEMU 'virt' usually starts RAM here
@@ -10,24 +12,6 @@ const TOTAL_PAGES = RAM_SIZE / PAGE_SIZE;
 // A simple bitmap. 1 bit per page.
 // will likely be a arraybitset... unless you have like 256kb. does the same thing either way
 var bitmap = std.StaticBitSet(TOTAL_PAGES);
-
-/// gets kernels end using the _end link symbol
-fn get_kernel_code_start() u64 {
-    asm volatile (
-        \\ mov x0, _start // puts the start linker symbol into x0
-        : [ret] "=x0" (-> u64), // marks the return to be the output in x0
-        : // empty line for no inputs
-        : .{ .x0 = true }); // clobbers x0
-}
-
-/// gets kernels end using the _end link symbol
-fn get_kernel_code_end() u64 {
-    asm volatile (
-        \\ mov x0, _end // puts the start linker symbol into x0
-        : [ret] "=x0" (-> u64), // marks the return to be the output in x0
-        : // empty line for no inputs
-        : .{ .x0 = true }); // clobbers x0
-}
 
 /// SAFETY: assumes the memory passed in is valid and within bounds
 /// includes the end page and the start page

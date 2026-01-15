@@ -4,10 +4,12 @@ const uart = @import("uart.zig");
 const interupts = @import("interupts/interupts.zig");
 const println = @import("uart.zig").println;
 const libc = @import("Libc");
+const mmu = @import("mem/mmu.zig");
 
 comptime {
     _ = libc.export_symbols();
     _ = interupts;
+    _ = mmu;
 }
 
 pub export fn _entry() align(16) void {
