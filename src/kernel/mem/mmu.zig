@@ -23,8 +23,8 @@ const tcr_el1 = packed struct {
 /// assigns attribute 1 and attribute 2 as packed u8s
 ///
 /// attr examples:
-/// 0b11111111: full rights memory, basically just normal ram
-/// 0b00000000: no rights device memory
+/// - 0b11111111: full rights memory, basically just normal ram
+/// - 0b00000000: no rights device memory
 const mair_el1 = packed struct { attr0: u8, atr1: u8, unused: u48 };
 
 comptime {
