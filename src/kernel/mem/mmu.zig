@@ -59,24 +59,6 @@ comptime {
     }
 }
 
-fn load_tcr_el1(value: tcr_el1) void {
-    asm volatile (
-        \\ msr tcr_el1, x0
-        \\ isb
-        : // no return
-        : [value] "{x0}" (value),
-        : .{ .x0 = true });
-}
-
-fn load_mair_el1(value: mair_el1) void {
-    asm volatile (
-        \\ msr mair_el1, x0
-        \\ isb
-        : // no return
-        : [value] "{x0}" (value),
-        : .{ .x0 = true });
-}
-
 fn set_ttbr0_el1(value: u64) void {
     asm volatile (
         \\ msr ttbr0_el1, %[val]
