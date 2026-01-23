@@ -38,7 +38,7 @@
           shellHook = ''
             echo "AArch64 bare-metal dev shell ready!"
             echo "Toolchain prefix: aarch64-none-elf-"
-            nu
+            nu -e "alias cloc = cloc --vcs git"
           '';
         };
       }
