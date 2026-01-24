@@ -50,6 +50,32 @@ const ttbr_el1 = packed struct {
     asid: u16,
 };
 
+/// Block Descriptor (Maps memory directly)
+/// We will use this at Level 2 to map 2MB blocks.
+const BlockDescriptor = packed struct {
+    valid: u1 = 1, // Must be 1
+    type: u1 = 0, // 0 = Block (THIS IS KEY: 01 binary)
+
+    /// Memory Attributes (MAIR Index)
+    /// 1 = Device, 0 = Normal (matches your MAIR setup)
+    attr_index: u3,
+
+    /// Permissions
+    ns: u1 = 0, // Non-Secure
+    ap: u2, // 00=RW_EL1, 01=RW_Any, 10=RO_EL1, 11=RO_Any
+    sh: u2, // Shareability (00=Non, 10=Outer, 11=Inner)
+    af: u1, // Access Flag (Must be 1 to prevent hardware fault)
+    ng: u1 = 0, // Not Global
+
+    reserved1: u9 = 0,
+
+    /// Output Physical Address
+    /// For a 2MB block, bits [47:21] are the address.
+    output_addr: u27,
+
+    reserved2: u16 = 0,
+};
+
 comptime {
     if (@bitSizeOf(tcr_el1) != 64) {
         @compileError("invalid size for tcr_el1");
@@ -100,6 +126,7 @@ pub fn init_mmu() void {
     // 1. Setup MAIR (Memory Attributes)
     // Attr0 = 0xFF (Normal Memory, Write-Back, Outer/Inner Shareable)
     // Attr1 = 0x00 (Device Memory, nGnRnE)
+    // the rest being unused
     const mair_val = mair_el1{
         .attr0 = 0xFF, // normal mem
         .attr1 = 0x00, // dev mem
@@ -110,7 +137,6 @@ pub fn init_mmu() void {
         .attr6 = 0,
         .attr7 = 0,
     };
-    // Re-using your load function logic here manually for clarity
     asm volatile ("msr mair_el1, %[v]"
         :
         : [v] "r" (@as(u64, @bitCast(mair_val))),
